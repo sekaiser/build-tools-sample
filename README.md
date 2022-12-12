@@ -46,7 +46,7 @@ Add some profiles, e.g.
             </configuration>
             <dependencies>
               <dependency>
-                <groupId>org.xplore</groupId>
+                <groupId>io.example</groupId>
                 <artifactId>build-tools</artifactId>
                 <version>1.0</version>
               </dependency>
@@ -110,7 +110,7 @@ Add some profiles, e.g.
             </configuration>
             <dependencies>
               <dependency>
-                <groupId>org.xplore</groupId>
+                <groupId>io.example</groupId>
                 <artifactId>build-tools</artifactId>
                 <version>1.0</version>
               </dependency>
@@ -164,7 +164,7 @@ Add some profiles, e.g.
             </configuration>
             <dependencies>
               <dependency>
-                <groupId>org.xplore</groupId>
+                <groupId>io.example</groupId>
                 <artifactId>build-tools</artifactId>
                 <version>1.0</version>
               </dependency>
