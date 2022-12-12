@@ -1,0 +1,201 @@
+# build tools sample
+
+# in your project's pom file
+
+Add some properties, e.g.
+```xml
+<properties>
+    <pmd.plugin.version>3.17.0</pmd.plugin.version>
+    <pmd.version>6.49.0</pmd.version>
+    <!-- https://maven.apache.org/plugins/maven-pmd-plugin/check-mojo.html -->
+    <!-- 1 := treat all violations as warnings; 5 := treat all violations as failures -->
+    <pmd.failurePriority>2</pmd.failurePriority>
+    <pmd.disabled>false</pmd.disabled>
+
+    <checkstyle.disabled>false</checkstyle.disabled>
+    <checkstyle.plugin.version>3.2.0</checkstyle.plugin.version>
+    <checkstyle.version>10.4</checkstyle.version>
+
+    <spotbugs.plugin.version>4.7.2.1</spotbugs.plugin.version>
+    <spotbugs.disabled>false</spotbugs.disabled>
+  </properties>
+```
+
+Add some profiles, e.g.
+
+```xml
+<profiles>
+    <profile>
+      <id>checkstyle</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>${checkstyle.plugin.version}</version>
+            <configuration>
+              <configLocation>checkstyle/checkstyle.xml</configLocation>
+              <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
+              <encoding>UTF-8</encoding>
+              <consoleOutput>true</consoleOutput>
+              <linkXRef>false</linkXRef>
+              <skip>${checkstyle.disabled}</skip>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>org.xplore</groupId>
+                <artifactId>build-tools</artifactId>
+                <version>1.0</version>
+              </dependency>
+              <dependency>
+                <groupId>com.puppycrawl.tools</groupId>
+                <artifactId>checkstyle</artifactId>
+                <version>${checkstyle.version}</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>validate</id>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <phase>validate</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>${checkstyle.plugin.version}</version>
+            <configuration>
+              <configLocation>checkstyle/checkstyle.xml</configLocation>
+              <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
+              <encoding>UTF-8</encoding>
+              <consoleOutput>true</consoleOutput>
+              <linkXRef>false</linkXRef>
+              <skip>${checkstyle.disabled}</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+    <profile>
+      <id>pmd</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>${pmd.plugin.version}</version>
+            <configuration>
+              <linkXRef>false</linkXRef>
+              <rulesets>
+                <ruleset>pmd/pmd.xml</ruleset>
+              </rulesets>
+              <failurePriority>${pmd.failurePriority}</failurePriority>
+              <printFailingErrors>true</printFailingErrors>
+              <skip>${pmd.disabled}</skip>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>org.xplore</groupId>
+                <artifactId>build-tools</artifactId>
+                <version>1.0</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>validate</id>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <phase>validate</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>${pmd.plugin.version}</version>
+            <configuration>
+              <rulesets>
+                <ruleset>pmd/pmd.xml</ruleset>
+              </rulesets>
+              <linkXRef>false</linkXRef>
+              <failurePriority>${pmd.failurePriority}</failurePriority>
+              <printFailingErrors>true</printFailingErrors>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+    <profile>
+      <id>spotbugs</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>${spotbugs.plugin.version}</version>
+            <configuration>
+              <effort>Max</effort>
+              <threshold>Low</threshold>
+              <excludeFilterFile>spotbugs/exclude.xml</excludeFilterFile>
+              <skip>${spotbugs.disabled}</skip>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>org.xplore</groupId>
+                <artifactId>build-tools</artifactId>
+                <version>1.0</version>
+              </dependency>
+            </dependencies>
+            <executions>
+              <execution>
+                <id>process-classes</id>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <phase>compile</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>${spotbugs.plugin.version}</version>
+            <configuration>
+              <effort>Max</effort>
+              <threshold>Low</threshold>
+              <excludeFilterFile>spotbugs/exclude.xml</excludeFilterFile>
+              <skip>${spotbugs.disabled}</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+  </profiles>
+```
